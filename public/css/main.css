@@ -51,211 +51,6 @@ textarea {
     padding: 0.2em 0;
 }
 
-
-/* ===== Initializr Styles ==================================================
-   Author: Jonathan Verrecchia - verekia.com/initializr/responsive-template
-   ========================================================================== */
-
-body {
-    font: 16px/26px Helvetica, Helvetica Neue, Arial;
-}
-
-.wrapper {
-    width: 90%;
-    margin: 0 5%;
-}
-
-/* ===================
-    ALL: Orange Theme
-   =================== */
-
-.header-container {
-    border-bottom: 20px solid rgba(40,40,40,0.7);
-}
-
-.footer-container,
-.main aside {
-    border-top: 20px solid rgba(40,40,40,0.7);
-}
-
-.header-container,
-.footer-container,
-.main aside {
-    background-color: rgba(81,81,81,0.7);
-}
-
-.title {
-    color: white;
-}
-
-/* ==============
-    MOBILE: Menu
-   ============== */
-
-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-nav a {
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 0;
-
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-
-    color: white;
-    background-color: rgba(60,60,60,0.7);
-}
-
-nav a:hover,
-nav a:visited {
-    color: white;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-/* ==============
-    MOBILE: Main
-   ============== */
-
-.main {
-    padding: 30px 0;
-}
-
-.main article h1 {
-    font-size: 2em;
-}
-
-.main aside {
-    color: white;
-    padding: 0px 5% 10px;
-}
-
-.footer-container footer {
-    color: white;
-    padding: 20px 0;
-}
-
-/* ===============
-    ALL: IE Fixes
-   =============== */
-
-.ie7 .title {
-    padding-top: 20px;
-}
-
-/* ==========================================================================
-   My's custom styles
-   ========================================================================== */
-
-body{
-    background: url('../img/pixel_weave.png');
-    background-repeat: repeat;
-}
-
-
-/* ==========================================================================
-   Media Queries
-   ========================================================================== */
-
-@media only screen and (min-width: 480px) {
-
-/* ====================
-    INTERMEDIATE: Menu
-   ==================== */
-
-    nav a {
-        float: left;
-        width: 22%;
-        margin: 0 1.7%;
-        padding: 25px 2%;
-        margin-bottom: 0;
-    }
-
-    nav li:first-child a {
-        margin-left: 0;
-    }
-
-    nav li:last-child a {
-        margin-right: 0;
-    }
-
-/* ========================
-    INTERMEDIATE: IE Fixes
-   ======================== */
-
-    nav ul li {
-        display: inline;
-    }
-
-    .oldie nav a {
-        margin: 0 0.7%;
-    }
-}
-
-@media only screen and (min-width: 768px) {
-
-/* ====================
-    WIDE: CSS3 Effects
-   ==================== */
-
-    .header-container,
-    .main aside {
-        -webkit-box-shadow: 0 5px 10px #aaa;
-           -moz-box-shadow: 0 5px 10px #aaa;
-                box-shadow: 0 5px 10px #aaa;
-    }
-
-/* ============
-    WIDE: Menu
-   ============ */
-
-    .title {
-        float: left;
-    }
-
-    nav {
-        float: right;
-        width: 40%;
-    }
-
-/* ============
-    WIDE: Main
-   ============ */
-
-    .main article {
-        float: left;
-        width: 57%;
-    }
-
-    .main aside {
-        float: right;
-        width: 28%;
-    }
-}
-
-@media only screen and (min-width: 1140px) {
-
-/* ===============
-    Maximal Width
-   =============== */
-
-    .wrapper {
-        width: 1026px; /* 1140px - 10% for margins */
-        margin: 0 auto;
-    }
-}
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
 .hidden {
     display: none !important;
     visibility: hidden;
@@ -363,3 +158,102 @@ body{
         page-break-after: avoid;
     }
 }
+
+/*
+ * BODY
+ */
+
+body{
+    background: url('../img/pixel_weave.png');
+    background-repeat: repeat;
+    min-height: 100%;
+}
+
+/*
+ *  HEADER
+ */
+
+header {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar-toggle .icon-bar {
+    background-color: rgba(81, 81, 81, 0.9);
+}
+
+/*
+ *  FOOTER
+ */
+
+footer {
+    background-color: rgba(81, 81, 81, 0.7);
+    color: #222;
+
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    text-align: center;
+    border-top: 10px solid rgba(88,88,88,0.7);
+}
+
+footer a:link{
+    color: #96B5BF;
+}
+
+footer a:visited{
+    color: #3C7081;
+}
+
+
+.main-footer-links {
+    padding-left: 0;
+    margin-top: 20px
+}
+.main-footer-links li {
+    display: inline;
+    padding: 0 2px
+}
+.main-footer-links li:first-child {
+    padding-left: 0
+}
+@media (min-width: 768px) {
+    .main-footer p {
+        margin-bottom: 0
+    }
+}
+.main-social {
+    margin-bottom: 20px;
+    text-align: center
+}
+.main-social-buttons {
+    display: inline-block;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none
+}
+.main-social-buttons li {
+    display: inline-block;
+    padding: 5px 8px;
+    line-height: 1
+}
+.main-social-buttons .twitter-follow-button {
+    width: 225px!important
+}
+.main-social-buttons .twitter-share-button {
+    width: 98px!important
+}
+.github-btn {
+    overflow: hidden;
+    border: 0
+}
+
+/*
+ * MAIN
+ */
+
+
