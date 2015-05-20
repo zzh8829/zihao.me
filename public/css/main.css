@@ -184,8 +184,8 @@ header{
 
 .main-nav .navbar-brand,
 .main-nav .navbar-nav>li>a {
-    font-weight: 500;
-    color: #74AFAD;
+    font-weight: 600;
+    color: #1B5C5A;
 }
 .main-nav .navbar-nav>.active>a,
 .main-nav .navbar-nav>.active>a:hover,
@@ -194,7 +194,7 @@ header{
     background-color: #f9f9f9;
 }
 .main-nav .navbar-toggle .icon-bar {
-    background-color: #74AFAD;
+    background-color: #1B5C5A;
 }
 .main-nav .navbar-header .navbar-toggle {
     border-color: #fff;
@@ -218,7 +218,7 @@ footer {
     position: absolute;
     width: 100%;
 
-    padding-top: 30px;
+    padding-top: 10px;
     padding-bottom: 30px;
 
     text-align: center;
@@ -226,17 +226,16 @@ footer {
 }
 
 footer a:link{
-    color: #74AFAD;
+    color: #1B5C5A;
 }
 
 footer a:visited{
-    color: #558C89;
+    color: #347471;
 }
-
 
 .main-footer-links {
     padding-left: 0;
-    margin-top: 20px
+    margin-top: 10px
 }
 .main-footer-links li {
     display: inline;
@@ -245,13 +244,13 @@ footer a:visited{
 .main-footer-links li:first-child {
     padding-left: 0
 }
+
 @media (min-width: 768px) {
     .main-footer p {
         margin-bottom: 0
     }
 }
 .main-social {
-    margin-bottom: 20px;
     text-align: center
 }
 .main-social-buttons {
@@ -263,17 +262,34 @@ footer a:visited{
 .main-social-buttons li {
     display: inline-block;
     padding: 5px 8px;
-    line-height: 1
 }
-.main-social-buttons .twitter-follow-button {
-    width: 225px!important
+
+.social:hover {
+    -webkit-transform:scale(1.2); 
+    -moz-transform:scale(1.2); 
+    -o-transform:scale(1.2); 
 }
-.main-social-buttons .twitter-share-button {
-    width: 98px!important
+
+.social {
+    -webkit-transform:scale(1.0);
+    -moz-transform:scale(1.0);
+    -o-transform:scale(1.0); 
+    -webkit-transition-duration: 0.5s; 
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+}           
+
+.social-fb:hover {
+    color: #3B5998;
 }
-.github-btn {
-    overflow: hidden;
-    border: 0
+.social-tw:hover {
+    color: #4099FF;
+}
+.social-gp:hover {
+    color: #d34836;
+}
+.social-em:hover {
+    color: #f39c12;
 }
 
 /*
