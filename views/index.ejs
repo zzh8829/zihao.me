@@ -6,13 +6,16 @@
     <head>
         <% include partials/head %>
         <title>Zihao Zhang</title>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <header class="navbar navbar-static-top" role="banner">
+        <header class="navbar navbar-static-top main-nav" role="banner">
             <div class="container">
                 <div class="navbar-header">
                     <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -40,7 +43,7 @@
         <footer role="contentinfo">
           <div class="container">
             <div class="main-social">
-          <ul class="main-social-buttons">
+          <!--ul class="main-social-buttons">
             <li>
               <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=zzh8829&amp;repo=zihao.me&amp;type=watch&amp;count=true" width="100" height="20" title="Star on GitHub"></iframe>
             </li>
@@ -53,7 +56,7 @@
             <li class="tweet-btn">
                 <a href="https://twitter.com/share" class="twitter-share-button" data-text="Zihao's Home Page" data-via="zzh8829" data-related="zzh8829" data-hashtags="zzh8829" data-dnt="true">Tweet</a>
             </li>
-          </ul>
+          </ul-->
         </div>
             <p>Designed and built with love by <a href="https://twitter.com/zzh8829" target="_blank">@zzh8829</a>.</p>
             <p>Code licensed under <a rel="license" href="https://github.com/zzh8829/zihao.me/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a rel="license" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.</p>
@@ -64,5 +67,56 @@
 
         <script src="/js/main.js"></script>
         <script src="/js/ga.js"></script>
+
+        <script>
+
+            var scene, camera, renderer;
+            var geometry, material, mesh;
+            var width, height;
+
+            init();
+
+            window.addEventListener('resize', onWindowResize, false);
+            animate();
+
+            function init() {
+                width = window.innerWidth;
+                height = window.innerHeight - 200;
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera( 75, width/height, 1, 10000);
+                camera.position.z = 1000;
+
+                geometry = new THREE.BoxGeometry( 200, 200, 200 );
+                material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+
+                mesh = new THREE.Mesh( geometry, material );
+                scene.add( mesh );
+
+                renderer = new THREE.WebGLRenderer({alpha: true});
+                renderer.setSize(width, height);
+
+                document.body.appendChild(renderer.domElement);
+            }
+
+            function animate() {
+                requestAnimationFrame( animate );
+
+                mesh.rotation.x += 0.01;
+                mesh.rotation.y += 0.02;
+
+                renderer.render( scene, camera );
+            }
+
+            function onWindowResize(){
+                width = window.innerWidth;
+                height = window.innerHeight - 200;
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+
+        </script>
     </body>
 </html>
