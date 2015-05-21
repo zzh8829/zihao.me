@@ -107,3 +107,22 @@ function onListening() {
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+// WebSocket Stuff
+
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+  socket.emit('init', {
+    message: "init",
+    id: socket.id
+  });
+  socket.on('insert', function(msg) {
+    io.emit('insert', msg);
+  });
+  socket.on('delete', function(msg) {
+    io.emit('delete', msg);
+  })
+});
+
+

@@ -225,11 +225,7 @@ footer {
     border-top: 10px solid rgba(150,150,150,0.7);
 }
 
-footer a:link{
-    color: #1B5C5A;
-}
-
-footer a:visited{
+footer a{
     color: #347471;
 }
 
@@ -265,31 +261,97 @@ footer a:visited{
 }
 
 .social:hover {
-    -webkit-transform:scale(1.2); 
-    -moz-transform:scale(1.2); 
-    -o-transform:scale(1.2); 
+    -webkit-transform:scale(1.2);
+    -moz-transform:scale(1.2);
+    -o-transform:scale(1.2);
 }
 
 .social {
     -webkit-transform:scale(1.0);
     -moz-transform:scale(1.0);
-    -o-transform:scale(1.0); 
-    -webkit-transition-duration: 0.5s; 
+    -o-transform:scale(1.0);
+    -webkit-transition-duration: 0.5s;
     -moz-transition-duration: 0.5s;
     -o-transition-duration: 0.5s;
-}           
+}
 
-.social-fb:hover {
+.social-facebook:hover {
     color: #3B5998;
 }
-.social-tw:hover {
-    color: #4099FF;
+.social-twitter:hover {
+    color: #00aced;
 }
-.social-gp:hover {
+.social-googleplus:hover {
     color: #d34836;
 }
-.social-em:hover {
-    color: #f39c12;
+.social-email:hover {
+    color: #1f85be;
+}
+
+.social-quora {
+    background: #347471;
+    border-radius:4px;
+    width:24px;
+    height:24px;
+    position:relative;
+    top: -6px;
+    cursor: pointer;
+}
+
+.social-quora:hover {
+    background: #a82400;
+}
+
+.social-youtube:hover {
+    color: #bb0000;
+}
+
+.social-linkedin:hover {
+    color: #007bb6;
+}
+
+.social-instagram:hover {
+    color: #517fa4;
+}
+
+.social-pinterest:hover {
+    color: #cb2027;
+}
+
+.social-vine:hover {
+    color: #00bf8f;
+}
+
+.social-snapchat:hover {
+    color: #fffc00;
+}
+
+.social-flickr:hover {
+    color: #ff0084;
+}
+
+.social-tumblr:hover {
+    color: #32506d;
+}
+
+.social-vk:hover {
+    color: #45668e;
+}
+
+.social-vimeo:hover {
+    color: #aad450;
+}
+
+.social-foursquare:hover {
+    color: #0072b1;
+}
+
+.social-lastfm:hover {
+    color: #FA1E23;
+}
+
+.social-steam:hover {
+    color: #171A21;
 }
 
 /*
