@@ -110,18 +110,19 @@ server.on('listening', onListening);
 
 // WebSocket Stuff
 
+var blocks = {}
+
 var io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
-  socket.emit('init', {
-    message: "init",
-    id: socket.id
+  socket.emit('init',blocks);
+  socket.on('insert', function(data) {
+    blocks[data] = true;
+    io.emit('insert', data);
   });
-  socket.on('insert', function(msg) {
-    io.emit('insert', msg);
-  });
-  socket.on('delete', function(msg) {
-    io.emit('delete', msg);
+  socket.on('delete', function(data) {
+    delete blocks[data];
+    io.emit('delete', data);
   })
 });
 
