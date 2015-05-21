@@ -123,6 +123,10 @@ io.on('connection', function (socket) {
   socket.on('delete', function(data) {
     delete blocks[data];
     io.emit('delete', data);
+  });
+  socket.on('clear', function(data) {
+    blocks = {}
+    io.emit('clear', data);
   })
 });
 

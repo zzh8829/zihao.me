@@ -14,7 +14,7 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
+        <div id="wrapper">
         <header class="navbar navbar-static-top main-nav" role="banner">
             <div class="container">
                 <div class="navbar-header">
@@ -38,12 +38,12 @@
             </div>
         </header>
 
-        <section id="main-canvas">
+        <div id="content">
 
-        </section>
+        </div>
 
         <footer role="contentinfo">
-          <div class="container">
+            <div class="container">
             <div class="main-social">
                 <ul class = "main-social-buttons">
                 <a href="https://github.com/zzh8829" target="_blank"><li><i class="social fa fa-github-square fa-2x social-gh"></i></li></a>
@@ -62,9 +62,9 @@
                 </ul>
             </div>
             <p>Designed and built with love by <a href="https://twitter.com/zzh8829" target="_blank">@zzh8829</a>.</p>
-            <p>Code licensed under <a rel="license" href="https://github.com/zzh8829/zihao.me/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a rel="license" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.</p>
-          </div>
+            </div>
         </footer>
+        </div>
 
         <script src="/js/main.js"></script>
         <script src="/js/ga.js"></script>
@@ -95,6 +95,7 @@
             var keysdown = {};
 
             var angle = 0;
+            var zoom = 1;
 
             THREE.ImageUtils.crossOrigin = '';
 
@@ -116,6 +117,9 @@
             socket.on('delete', function(data) {
                 serverDeleteBlock.apply(null,data);
             });
+            socket.on('clear', function(data) {
+                serverClearBlocks.apply(null,data);
+            })
 
             animate();
 
@@ -194,6 +198,7 @@
                 stats.domElement.style.right = '0px';
                 stats.domElement.style.bottom = '0px';
                 stats.domElement.style.zIndex = 100;
+                stats.domElement.style.visibility = 'hidden';
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -205,7 +210,7 @@
                 document.addEventListener( 'keyup', onDocumentKeyUp, false );
 
                 document.body.appendChild(stats.domElement);
-                $("#main-canvas").append(renderer.domElement);
+                $("#content").append(renderer.domElement);
             }
 
             function onDocumentMouseMove( event ) {
@@ -303,6 +308,16 @@
                     case 68:
                         autoRotate = false;
                         break;
+                    case 81:
+                        if(stats.domElement.style.visibility == 'hidden') {
+                            stats.domElement.style.visibility = 'visible';
+                        } else {
+                            stats.domElement.style.visibility = 'hidden';
+                        }
+                        break;
+                    case 67:
+                        clearBlocks();
+                        break;
                 }
 
             }
@@ -353,9 +368,17 @@
                     angle -= delta;
                 }
 
-                camera.position.x = Math.cos(angle) * 700;
-                camera.position.y = 800;
-                camera.position.z = Math.sin(angle) * 700;
+                if(keysdown[83]) {
+                    zoom = Math.min(2, zoom*1.01);
+                }
+
+                if(keysdown[87]) {
+                    zoom = Math.max(1, zoom/1.01);
+                }
+
+                camera.position.x = Math.cos(angle) * 700 * zoom;
+                camera.position.y = 800 * zoom;
+                camera.position.z = Math.sin(angle) * 700 * zoom;
                 camera.lookAt(new THREE.Vector3());
 
                 renderer.render( scene, camera );
@@ -372,14 +395,7 @@
             }
 
             function insertBlock(x,y,z) {
-                if(!([x,y,z] in blocks))
-                {
-                    var voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
-                    voxel.position.set(x,y,z).multiplyScalar( 50 ).addScalar( 25 );
-                    scene.add( voxel );
-                    objects.push( voxel );
-                    blocks[[x,y,z]] = voxel;
-                }
+                serverInsertBlock(x,y,z);
                 socket.emit("insert", [x,y,z]);
             }
 
@@ -395,12 +411,7 @@
             }
 
             function deleteBlock(x,y,z) {
-                if([x,y,z] in blocks)
-                {
-                    scene.remove(blocks[[x,y,z]]);
-                    objects.splice(objects.indexOf( blocks[[x,y,z]] ), 1 );
-                    delete blocks[[x,y,z]];
-                }
+                serverDeleteBlock(x,y,z);
                 socket.emit("delete", [x,y,z]);
             }
 
@@ -410,6 +421,17 @@
                     scene.remove(blocks[[x,y,z]]);
                     objects.splice(objects.indexOf( blocks[[x,y,z]] ), 1 );
                     delete blocks[[x,y,z]];
+                }
+            }
+
+            function clearBlocks() {
+                serverClearBlocks();
+                socket.emit('clear');
+            }
+
+            function serverClearBlocks() {
+                for(var pos in blocks) {
+                    serverDeleteBlock.apply(null,pos.split(',').map(Number));
                 }
             }
         </script>

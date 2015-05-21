@@ -1,5 +1,5 @@
 /*======= Basic Rules ===============*/
-body{
+#content{
     font-family: 'Open Sans', sans-seriff;
     font-size: 14px;
 }
@@ -23,54 +23,8 @@ h1{
 
 .f1{font-size: 34px}
 
-.links-wrapper{
-    display: table;
-    margin: 0 auto;
-    margin-bottom: 20px;
+#content{
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 150px;
 }
-
-ul.links{
-    list-style: none;
-    padding-top: 20px;
-    padding-left: 0px;
-}
-
-ul.links li{
-    display: inline;
-    padding: 0;
-    margin: 10px 10px;
-}
-
-ul.links li a{
-    height: 50px;
-    width: 50px;
-    min-width: 50px;
-    display: inline-block;
-    padding: 3px 0px;
-    background-color: #fff;
-    border-radius: 50%;
-    text-align: center;
-}
-
-ul.links li a i{
-    padding: 6px 0px;
-}
-
-ul.links li a:hover{
-    color: #ddd;
-}
-
-.container{
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-#content {
-    height: 85%;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 2%; bottom: 0; right: 2%;
-}
-
-
-
