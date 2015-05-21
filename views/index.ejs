@@ -88,6 +88,11 @@
 
             var clock = new THREE.Clock();
 
+            var autoRotate = true;
+            var keysdown = {};
+
+            var angle = 0;
+
             THREE.ImageUtils.crossOrigin = '';
 
             init();
@@ -95,17 +100,19 @@
 
             function init() {
                 width = window.innerWidth;
-                height = window.innerHeight - 200;
+                height = window.innerHeight;
 
                 scene = new THREE.Scene();
 
                 camera = new THREE.PerspectiveCamera( 45, width/height, 1, 10000);
                 //camera.position.set( 200, 320, 640 );
                 camera.lookAt( new THREE.Vector3() );
+                camera.useQuaternion = true
 
                 rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
                 rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x1B5C5A, opacity: 0.5, transparent: true } );
                 rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+                rollOverMesh.visible = false;
                 scene.add( rollOverMesh );
 
                 // cubes
@@ -115,7 +122,7 @@
 
                 // grid
 
-                var size = 1000, step = 50;
+                var size = 2000, step = 50;
 
                 var geometry = new THREE.Geometry();
 
@@ -137,9 +144,9 @@
                 //
 
                 raycaster = new THREE.Raycaster();
-                mouse = new THREE.Vector2();
+                mouse = new THREE.Vector2(-1,-1);
 
-                var geometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
+                var geometry = new THREE.PlaneBufferGeometry( 4000, 4000 );
                 geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
                 plane = new THREE.Mesh( geometry );
@@ -159,16 +166,23 @@
 
                 renderer = new THREE.WebGLRenderer({alpha: true, antialias:true});
                 renderer.setSize(width, height);
+                renderer.domElement.style.position = 'absolute';
+                renderer.domElement.style.top = '0px';
 
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.right = '0px';
                 stats.domElement.style.bottom = '0px';
+                stats.domElement.style.zIndex = 100;
 
                 window.addEventListener('resize', onWindowResize, false);
 
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
                 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+                document.addEventListener( 'touchend', onDocumentTouchEnd, false);
+                document.addEventListener( 'keydown', onDocumentKeyDown, false );
+                document.addEventListener( 'keyup', onDocumentKeyUp, false );
 
                 document.body.appendChild(stats.domElement);
                 document.body.appendChild(renderer.domElement);
@@ -178,7 +192,8 @@
 
                 event.preventDefault();
 
-                mouse.set((event.clientX/width) * 2 - 1, - ((event.clientY-50)/height) * 2 + 1 );
+                mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
+                rollOverMesh.visible = true;
 
             }
 
@@ -186,7 +201,8 @@
 
                 event.preventDefault();
 
-                mouse.set((event.clientX/width) * 2 - 1, - ((event.clientY-50)/height) * 2 + 1 );
+                mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
+                rollOverMesh.visible = true;
 
                 raycaster.setFromCamera( mouse, camera );
 
@@ -213,28 +229,124 @@
                 }
             }
 
+            var touchStarted = false,
+                currX = 0,
+                currY = 0,
+                cachedX = 0,
+                cachedY = 0;
+
+            var lastTap = 0;
+
+            function onDocumentTouchStart( event ) {
+
+                event.preventDefault()
+
+                var pointer = getPointerEvent(event);
+                cachedX = currX = pointer.pageX;
+                cachedY = currY = pointer.pageY;
+                touchStarted = true;
+
+                setTimeout(function (){
+                    if ((cachedX === currX) && !touchStarted && (cachedY === currY)) {
+                        var now = Date.now();
+
+                        mouse.set((currX/width) * 2 - 1, - (currY/height) * 2 + 1 );
+
+                        raycaster.setFromCamera( mouse, camera );
+
+                        var intersects = raycaster.intersectObjects( objects );
+
+                        if ( intersects.length > 0 ) {
+                            var intersect = intersects[ 0 ];
+                            if(now - lastTap < 600 && now - lastTap > 0) {
+                                if ( intersect.object != plane ) {
+                                    scene.remove( intersect.object );
+                                    objects.splice( objects.indexOf( intersect.object ), 1 );
+
+                                }
+                            } else {
+                                var voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
+                                voxel.position.copy( intersect.point ).add( intersect.face.normal );
+                                voxel.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+                                scene.add( voxel );
+
+                                objects.push( voxel );
+                            }
+                        }
+                        lastTap = Date.now();
+                    }
+                },100);
+            }
+
+            function onDocumentTouchEnd( event ) {
+                event.preventDefault();
+                touchStarted = false;
+            }
+
+            function onDocumentKeyDown( event ) {
+                keysdown[event.keyCode] = true;
+
+                switch( event.keyCode ) {
+                    case 65:
+                        autoRotate = false;
+                        break;
+                    case 68:
+                        autoRotate = false;
+                        break;
+                }
+
+            }
+
+            function onDocumentKeyUp( event ) {
+                keysdown[event.keyCode] = false;
+
+                switch ( event.keyCode ) {
+                    case 32:
+                        autoRotate = !autoRotate;
+                        break;
+                }
+
+            }
 
             function animate() {
                 requestAnimationFrame( animate );
 
-                var timer = Date.now() * 0.0003;
+                var delta = clock.getDelta();
 
-                raycaster.setFromCamera( mouse, camera );
+                if(mouse.x != -1 && mouse.y != -1)
+                {
+                    raycaster.setFromCamera( mouse, camera );
 
-                var intersects = raycaster.intersectObjects( objects );
+                    var intersects = raycaster.intersectObjects( objects );
 
-                if ( intersects.length > 0 ) {
+                    if ( intersects.length > 0 ) {
 
-                    var intersect = intersects[ 0 ];
+                        var intersect = intersects[ 0 ];
 
-                    rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
-                    rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+                        rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
+                        rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
 
+                    }
                 }
 
-                camera.position.x = Math.cos( timer ) * 700;
+                if(autoRotate)
+                {
+                    angle += delta/5;
+                }
+
+                if(keysdown[65])
+                {
+                    angle += delta;
+                }
+
+                if(keysdown[68])
+                {
+                    angle -= delta;
+                }
+
+                camera.position.x = Math.cos(angle) * 700;
                 camera.position.y = 800;
-                camera.position.z = Math.sin( timer ) * 700;
+                camera.position.z = Math.sin(angle) * 700;
                 camera.lookAt(new THREE.Vector3());
 
                 renderer.render( scene, camera );
@@ -244,7 +356,7 @@
 
             function onWindowResize(){
                 width = window.innerWidth;
-                height = window.innerHeight - 200;
+                height = window.innerHeight;
                 camera.aspect = width/height;
                 camera.updateProjectionMatrix();
                 renderer.setSize(width, height);

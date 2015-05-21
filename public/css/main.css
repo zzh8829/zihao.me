@@ -219,10 +219,12 @@ footer {
     width: 100%;
 
     padding-top: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
 
     text-align: center;
     border-top: 10px solid rgba(150,150,150,0.7);
+
+    z-index:10;
 }
 
 footer a{
