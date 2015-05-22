@@ -103,7 +103,6 @@
 
             var socket = io();
             socket.on('init', function(data) {
-                console.log(data);
                 for(var pos in blocks) {
                     serverDeleteBlock.apply(null,pos.split(',').map(Number));
                 }
@@ -203,9 +202,9 @@
                 window.addEventListener('resize', onWindowResize, false);
 
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-                document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-                document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-                document.addEventListener( 'touchend', onDocumentTouchEnd, false);
+                renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                //renderer.domElement.addEventListener( 'touchstart', onDocumentTouchStart, false );
+                //renderer.domElement.addEventListener( 'touchend', onDocumentTouchEnd, false);
                 document.addEventListener( 'keydown', onDocumentKeyDown, false );
                 document.addEventListener( 'keyup', onDocumentKeyUp, false );
 
@@ -215,20 +214,14 @@
 
             function onDocumentMouseMove( event ) {
 
-                event.preventDefault();
-
                 mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
-                rollOverMesh.visible = true;
-
+                
             }
 
             function onDocumentMouseDown( event ) {
 
-                event.preventDefault();
-
                 mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
-                rollOverMesh.visible = true;
-
+                
                 raycaster.setFromCamera( mouse, camera );
 
                 var intersects = raycaster.intersectObjects( objects );
@@ -249,53 +242,44 @@
                 }
             }
 
-            var touchStarted = false,
-                currX = 0,
-                currY = 0,
-                cachedX = 0,
-                cachedY = 0;
-
+            var clickTimer = null;
             var lastTap = 0;
 
             function onDocumentTouchStart( event ) {
-
-                event.preventDefault()
-
+                //event.preventDefault()
+                return; // Does not work!
                 var pointer = getPointerEvent(event);
-                cachedX = currX = pointer.pageX;
-                cachedY = currY = pointer.pageY;
-                touchStarted = true;
+                var currX = pointer.pageX;
+                var currY = pointer.pageY;
+                
+                mouse.set((currX/width) * 2 - 1, - (currY/height) * 2 + 1 );
 
-                setTimeout(function (){
-                    if ((cachedX === currX) && !touchStarted && (cachedY === currY)) {
-                        var now = Date.now();
+                raycaster.setFromCamera( mouse, camera );
 
-                        mouse.set((currX/width) * 2 - 1, - (currY/height) * 2 + 1 );
+                var intersects = raycaster.intersectObjects( objects );
 
-                        raycaster.setFromCamera( mouse, camera );
-
-                        var intersects = raycaster.intersectObjects( objects );
-
-                        if ( intersects.length > 0 ) {
-                            var intersect = intersects[ 0 ];
-                            if(now - lastTap < 600 && now - lastTap > 0) {
-                                if ( intersect.object != plane ) {
-                                    deleteBlock(intersect.object.position.divideScalar( 50 ).floor())
-                                }
-                            } else {
-                                var position = new THREE.Vector3().copy(intersect.point).add( intersect.face.normal ).divideScalar( 50 ).floor();
-
-                                insertBlock(position.x,position.y,position.z);
-                            }
+                if( intersects.length > 0 ) {
+                    var intersect = intersects[ 0 ];
+                    if (clickTimer == null) {
+                        clickTimer = setTimeout(function () {
+                            clickTimer = null;
+                            var position = new THREE.Vector3().copy(intersect.point).add( intersect.face.normal ).divideScalar( 50 ).floor();
+                            insertBlock(position.x,position.y,position.z);
+                        }, 300)
+                    } else {
+                        clearTimeout(clickTimer);
+                        clickTimer = null;
+                        
+                        if ( intersect.object != plane ) {
+                            var position = new THREE.Vector3().copy(intersect.object.position).divideScalar(50).floor();
+                            deleteBlock(position.x,position.y,position.z);
                         }
-                        lastTap = Date.now();
                     }
-                },100);
+                }
             }
 
             function onDocumentTouchEnd( event ) {
-                event.preventDefault();
-                touchStarted = false;
+                //event.preventDefault();
             }
 
             function onDocumentKeyDown( event ) {
@@ -339,6 +323,8 @@
 
                 if(mouse.x != -1 && mouse.y != -1)
                 {
+                    rollOverMesh.visible = true;
+
                     raycaster.setFromCamera( mouse, camera );
 
                     var intersects = raycaster.intersectObjects( objects );
