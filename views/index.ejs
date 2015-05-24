@@ -38,9 +38,9 @@
             </div>
         </header>
 
-        <div id="content">
+        <main id="content">
 
-        </div>
+        </main>
 
         <footer role="contentinfo">
             <div class="container">
@@ -215,13 +215,13 @@
             function onDocumentMouseMove( event ) {
 
                 mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
-                
+
             }
 
             function onDocumentMouseDown( event ) {
 
                 mouse.set((event.clientX/width) * 2 - 1, - (event.clientY/height) * 2 + 1 );
-                
+
                 raycaster.setFromCamera( mouse, camera );
 
                 var intersects = raycaster.intersectObjects( objects );
@@ -251,7 +251,7 @@
                 var pointer = getPointerEvent(event);
                 var currX = pointer.pageX;
                 var currY = pointer.pageY;
-                
+
                 mouse.set((currX/width) * 2 - 1, - (currY/height) * 2 + 1 );
 
                 raycaster.setFromCamera( mouse, camera );
@@ -269,7 +269,7 @@
                     } else {
                         clearTimeout(clickTimer);
                         clickTimer = null;
-                        
+
                         if ( intersect.object != plane ) {
                             var position = new THREE.Vector3().copy(intersect.object.position).divideScalar(50).floor();
                             deleteBlock(position.x,position.y,position.z);
