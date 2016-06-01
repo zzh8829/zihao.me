@@ -1,4 +1,7 @@
 {
-    "verbose": false,
-    "ignore": ["public/*"]
+  "verbose": true,
+  "watch": [
+    "public/js/craft.js",
+    "app.js"
+  ]
 }
