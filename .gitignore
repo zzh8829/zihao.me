@@ -1,2 +1,11 @@
 node_modules/
 public/js/vendor/three.js/
+version.json
+secrets.json
+artifacts
+*.log
+public/app.js
+tmp/
+tmp/*
+.vscode
+.DS_Store

@@ -1,30 +1,30 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
+global.Promise = require('bluebird');
 
-var port = process.env.PORT || 3000;
+const express        = require('express');
+const bodyParser     = require('body-parser');
+const cookieParser   = require('cookie-parser');
+const errorHandler   = require('errorhandler');
+const methodOverride = require('method-override');
+const debug          = require('debug')('zihao.me:server');
+const path           = require("path");
+const logger         = require('morgan');
+const cors           = require('cors');
+
+const app    = express();
+const server = require('http').createServer(app);
+const io     = require('socket.io').listen(server);
+const port   = process.env.PORT || 3000;
+
+const routes = require('./routes/index');
+const api    = require('./routes/api');
+
 app.set('port', port);
-
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var errorHandler = require('errorhandler');
-var methodOverride = require('method-override');
-var debug = require('debug')('zihao.me:server');
-var path = require("path");
-var logger = require('morgan');
-var favicon = require('serve-favicon');
-
-var cors = require('cors');
-
-var routes = require('./routes/index');
-var api = require('./routes/api');
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.disable('x-powered-by');
 
 app.use(cors());
-app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(methodOverride());
 app.use(errorHandler());
@@ -95,10 +95,6 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
@@ -113,9 +109,7 @@ server.on('listening', onListening);
 
 // WebSocket Stuff
 
-var blocks = {}
-
-var io = require('socket.io')(server);
+const blocks = {}
 
 io.on('connection', function (socket) {
   socket.emit('init',blocks);

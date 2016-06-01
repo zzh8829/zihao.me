@@ -1,0 +1,22 @@
+{
+  "extends": "airbnb",
+  "plugins": [
+    "react"
+  ],
+  "rules":{
+    "comma-dangle": [2, "never"],
+    "yoda": 0,
+    "new-cap": 0,
+    "max-len": 0,
+    "brace-style": [2, "stroustrup"],
+    "react/prefer-es6-class": [2, "never"],
+    "react/prefer-stateless-function": 0,
+    "arrow-body-style": [2, "always"],
+    "no-multi-spaces": [2, { "exceptions": { "VariableDeclarator": true }}],
+    "no-use-before-define": [2, "nofunc"]
+  },
+  "env":{
+    "node": true,
+    "mocha": true
+  }
+}

@@ -7,7 +7,7 @@
         <% include partials/head %>
         <title>Zihao Zhang</title>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
 
     </head>
     <body>
@@ -161,7 +161,7 @@
 
                 var material = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
-                var line = new THREE.Line( geometry, material, THREE.LinePieces );
+                var line = new THREE.LineSegments( geometry, material );
                 scene.add( line );
 
                 //
@@ -170,10 +170,9 @@
                 mouse = new THREE.Vector2(-1,-1);
 
                 var geometry = new THREE.PlaneBufferGeometry( 4000, 4000 );
-                geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+                geometry.rotateX( - Math.PI / 2 );
 
-                plane = new THREE.Mesh( geometry );
-                plane.visible = false;
+                plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { visible: false } ) );
                 scene.add( plane );
 
                 objects.push( plane );
