@@ -69,8 +69,9 @@
         <script src="/js/main.js"></script>
         <script src="/js/ga.js"></script>
 
-        <script src="/js/vendor/three.js/examples/js/Detector.js"></script>
         <script src="/js/vendor/three.js/examples/js/libs/stats.min.js"></script>
+        <script src="/js/vendor/three.js/examples/js/Detector.js"></script>
+        <script src="/js/vendor/three.js/examples/js/ImprovedNoise.js"></script>
 
         <script>
             if (!Detector.webgl ) Detector.addGetWebGLMessage();
@@ -282,23 +283,26 @@
             }
 
             function onDocumentKeyDown( event ) {
-                keysdown[event.keyCode] = true;
+                const code = event.which || event.keyCode;
+                const char = String.fromCharCode(code);
 
-                switch( event.keyCode ) {
-                    case 65:
+                keysdown[code] = true;
+
+                switch (char) {
+                    case 'A':
                         autoRotate = false;
                         break;
-                    case 68:
+                    case 'D':
                         autoRotate = false;
                         break;
-                    case 81:
+                    case 'Q':
                         if(stats.domElement.style.visibility == 'hidden') {
                             stats.domElement.style.visibility = 'visible';
                         } else {
                             stats.domElement.style.visibility = 'hidden';
                         }
                         break;
-                    case 67:
+                    case 'C':
                         clearBlocks();
                         break;
                 }
@@ -306,10 +310,13 @@
             }
 
             function onDocumentKeyUp( event ) {
-                keysdown[event.keyCode] = false;
+                const code = event.which || event.keyCode;
+                const char = String.fromCharCode(code);
 
-                switch ( event.keyCode ) {
-                    case 32:
+                keysdown[code] = true;
+
+                switch (char) {
+                    case ' ':
                         autoRotate = !autoRotate;
                         break;
                 }
@@ -338,26 +345,23 @@
                     }
                 }
 
-                if(autoRotate)
-                {
+                if(autoRotate) {
                     angle += delta*0.1;
                 }
 
-                if(keysdown[65])
-                {
+                if(keysdown[65]) { //a
                     angle += delta;
                 }
 
-                if(keysdown[68])
-                {
+                if(keysdown[68]) { //d
                     angle -= delta;
                 }
 
-                if(keysdown[83]) {
+                if(keysdown[83]) { //s
                     zoom = Math.min(2, zoom*1.01);
                 }
 
-                if(keysdown[87]) {
+                if(keysdown[87]) { // w
                     zoom = Math.max(1, zoom/1.01);
                 }
 

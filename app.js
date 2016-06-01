@@ -6,7 +6,7 @@ const cookieParser   = require('cookie-parser');
 const errorHandler   = require('errorhandler');
 const methodOverride = require('method-override');
 const debug          = require('debug')('zihao.me:server');
-const path           = require("path");
+const path           = require('path');
 const logger         = require('morgan');
 const cors           = require('cors');
 
@@ -29,7 +29,7 @@ app.use(logger('dev'));
 app.use(methodOverride());
 app.use(errorHandler());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -37,7 +37,7 @@ app.use('/', routes);
 app.use('/api', api);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -59,7 +59,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -109,22 +109,22 @@ server.on('listening', onListening);
 
 // WebSocket Stuff
 
-const blocks = {}
+const blocks = {};
 
 io.on('connection', function (socket) {
-  socket.emit('init',blocks);
-  socket.on('insert', function(data) {
+  socket.emit('init', blocks);
+  socket.on('insert', function (data) {
     blocks[data] = true;
     io.emit('insert', data);
   });
-  socket.on('delete', function(data) {
+  socket.on('delete', function (data) {
     delete blocks[data];
     io.emit('delete', data);
   });
-  socket.on('clear', function(data) {
-    blocks = {}
+  socket.on('clear', function (data) {
+    blocks = {};
     io.emit('clear', data);
-  })
+  });
 });
 
 
