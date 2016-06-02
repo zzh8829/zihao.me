@@ -115,14 +115,14 @@ io.on('connection', (socket) => {
   socket.emit('init', blocks);
   socket.on('insert', (data) => {
     blocks[data] = true;
-    io.emit('insert', data);
+    socket.broadcast.emit('insert', data);
   });
   socket.on('delete', (data) => {
     delete blocks[data];
-    io.emit('delete', data);
+    socket.broadcast.emit('delete', data);
   });
   socket.on('clear', (data) => {
     blocks = {};
-    io.emit('clear', data);
+    socket.broadcast.emit('clear', data);
   });
 });
