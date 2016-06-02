@@ -237,7 +237,7 @@ function onDocumentKeyUp(event) {
   const code = event.which || event.keyCode;
   const char = String.fromCharCode(code);
 
-  keysdown[code] = true;
+  keysdown[code] = false;
 
   switch (char) {
     case ' ':
