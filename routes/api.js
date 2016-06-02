@@ -1,20 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var request = require('request');
+const express = require('express');
+const router  = express.Router();
+const request = require('request');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res) => {
   res.send('respond with a resource');
 });
 
-router.post('/codepad', function(req, res, next) {
-  request.post("http://codepad.org", {form: req.body }, 
-    function (error, response, body) {
-	  var redirect = response.headers['location'];
-	  console.log(redirect);
-	  request(redirect).pipe(res);
-	}
-  );
+router.post('/codepad', (req, res) => {
+  request.post('http://codepad.org', { form: req.body },
+    (error, response) => {
+      const redirect = response.headers.location;
+      console.log(redirect);
+      request(redirect).pipe(res);
+    });
 });
 
 module.exports = router;

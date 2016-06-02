@@ -108,10 +108,10 @@
 
   const socket = io();
   socket.on('init', (data) => {
-    for (const pos of blocks) {
+    for (const pos of Object.keys(blocks)) {
       serverDeleteBlock.apply(null, pos.split(',').map(Number));
     }
-    for (const pos of data) {
+    for (const pos of Object.keys(data)) {
       serverInsertBlock.apply(null, pos.split(',').map(Number));
     }
   });
@@ -329,7 +329,7 @@
   }
 
   function serverClearBlocks() {
-    for (const pos of blocks) {
+    for (const pos of Object.keys(blocks)) {
       serverDeleteBlock.apply(null, pos.split(',').map(Number));
     }
   }

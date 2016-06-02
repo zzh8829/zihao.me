@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon app.js",
-    "eslint": "eslint app.js public/js/craft.js --fix"
+    "eslint": "eslint app.js routes/*.js public/js/craft.js --fix"
   },
   "dependencies": {
     "bluebird": "^3.4.0",
