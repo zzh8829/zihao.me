@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "eslint": "eslint app.js public/js/craft.js --fix"
   },
   "dependencies": {
     "bluebird": "^3.4.0",

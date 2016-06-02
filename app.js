@@ -37,8 +37,8 @@ app.use('/', routes);
 app.use('/api', api);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -48,7 +48,7 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
+  app.use((err, req, res) => {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -59,7 +59,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -76,7 +76,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  const bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -96,8 +96,8 @@ function onError(error) {
 }
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  const addr = server.address();
+  const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
@@ -109,22 +109,20 @@ server.on('listening', onListening);
 
 // WebSocket Stuff
 
-const blocks = {};
+let blocks = {};
 
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
   socket.emit('init', blocks);
-  socket.on('insert', function (data) {
+  socket.on('insert', (data) => {
     blocks[data] = true;
     io.emit('insert', data);
   });
-  socket.on('delete', function (data) {
+  socket.on('delete', (data) => {
     delete blocks[data];
     io.emit('delete', data);
   });
-  socket.on('clear', function (data) {
+  socket.on('clear', (data) => {
     blocks = {};
     io.emit('clear', data);
   });
 });
-
-

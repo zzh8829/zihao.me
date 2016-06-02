@@ -11,7 +11,10 @@
     "react/prefer-stateless-function": 0,
     "arrow-body-style": [2, "always"],
     "no-multi-spaces": [2, { "exceptions": { "VariableDeclarator": true }}],
-    "no-use-before-define": [2, "nofunc"]
+    "no-use-before-define": [2, "nofunc"],
+    "newline-per-chained-call": 0,
+    "no-console": 0,
+    "prefer-template": 0
   },
   "env":{
     "node": true,
