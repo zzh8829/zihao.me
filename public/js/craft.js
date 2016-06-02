@@ -26,9 +26,14 @@
 
   const scene = new THREE.Scene();
 
-  const camera = new THREE.PerspectiveCamera(70, width / height, 1, 10000);
+  const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
   // camera.position.set( 200, 320, 640 );
   camera.lookAt(new THREE.Vector3());
+
+  // fog
+  scene.fog = new THREE.FogExp2(0xffffff, 0.0005);
+
+  // rollover
 
   const rollOverGeo = new THREE.BoxGeometry(50, 50, 50);
   const rollOverMaterial = new THREE.MeshBasicMaterial({ color: 0x1B5C5A, opacity: 0.5, transparent: true });
@@ -107,18 +112,11 @@
   document.body.appendChild(stats.domElement);
   $('#content').append(renderer.domElement);
 
-  const worldWidth = 64;
-  const worldDepth = 64;
-  const worldHalfWidth = worldWidth / 2;
-  const worldHalfDepth = worldDepth / 2;
-
   const blocks = {};
 
   const socket = io();
   socket.on('init', (data) => {
-    for (const pos of Object.keys(blocks)) {
-      serverDeleteBlock.apply(null, pos.split(',').map(Number));
-    }
+    serverClearBlocks();
     for (const pos of Object.keys(data)) {
       serverInsertBlock.apply(null, pos.split(',').map(Number));
     }
@@ -129,8 +127,8 @@
   socket.on('delete', (data) => {
     serverDeleteBlock.apply(null, data);
   });
-  socket.on('clear', (data) => {
-    serverClearBlocks.apply(null, data);
+  socket.on('clear', () => {
+    serverClearBlocks();
   });
 
   animate();
@@ -228,7 +226,6 @@
         clearBlocks();
         break;
       case 'G':
-        clearBlocks();
         generateMap();
         break;
       default:
@@ -289,9 +286,9 @@
       zoom = Math.max(1, zoom / 1.01);
     }
 
-    camera.position.x = Math.cos(angle) * 800 * zoom;
+    camera.position.x = Math.cos(angle) * 700 * zoom;
     camera.position.y = 800 * zoom;
-    camera.position.z = Math.sin(angle) * 800 * zoom;
+    camera.position.z = Math.sin(angle) * 700 * zoom;
     camera.lookAt(new THREE.Vector3());
 
     renderer.render(scene, camera);
@@ -347,52 +344,6 @@
   }
 
   function generateMap() {
-    const data = generateHeight(worldWidth, worldDepth);
-    const getY = ((x, z) => {
-      return (data[x + z * worldWidth] * 0.2) | 0;
-    });
-
-    for (let z = 0; z < worldDepth; z ++) {
-      for (let x = 0; x < worldWidth; x ++) {
-        insertBlock(x - worldHalfWidth, getY(x, z), z - worldHalfDepth);
-        // matrix.makeTranslation(
-        //   x * 100 - worldHalfWidth * 100,
-        //   h * 100,
-        //   z * 100 - worldHalfDepth * 100
-        // );
-        // var px = getY( x + 1, z );
-        // var nx = getY( x - 1, z );
-        // var pz = getY( x, z + 1 );
-        // var nz = getY( x, z - 1 );
-        // tmpGeometry.merge( pyTmpGeometry, matrix );
-        // if ( ( px !== h && px !== h + 1 ) || x === 0 ) {
-        //   tmpGeometry.merge( pxTmpGeometry, matrix );
-        // }
-        // if ( ( nx !== h && nx !== h + 1 ) || x === worldWidth - 1 ) {
-        //   tmpGeometry.merge( nxTmpGeometry, matrix );
-        // }
-        // if ( ( pz !== h && pz !== h + 1 ) || z === worldDepth - 1 ) {
-        //   tmpGeometry.merge( pzTmpGeometry, matrix );
-        // }
-        // if ( ( nz !== h && nz !== h + 1 ) || z === 0 ) {
-        //   tmpGeometry.merge( nzTmpGeometry, matrix );
-        // }
-      }
-    }
+    socket.emit('generate');
   }
-  /*eslint-disable */
-  function generateHeight(width, height) {
-    var data = [], perlin = new ImprovedNoise(),
-      size = width * height, quality = 2, z = Math.random() * 100;
-    for (var j = 0; j < 4; j ++) {
-      if (j === 0) for (var i = 0; i < size; i ++) data[i] = 0;
-      for (var i = 0; i < size; i ++) {
-        var x = i % width, y = (i / width) | 0;
-        data[i] += perlin.noise(x / quality, y / quality, z) * quality;
-      }
-      quality *= 4;
-    }
-    return data;
-  }
-  /*eslint-enable */
 })();
