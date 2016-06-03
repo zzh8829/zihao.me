@@ -128,7 +128,6 @@ io.on('connection', (socket) => {
   socket.on('generate', () => {
     io.sockets.emit('clear');
     blocks = generateMap();
-    console.log(blocks)
     io.sockets.emit('init', blocks);
   });
 });
