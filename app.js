@@ -12,7 +12,7 @@ const port   = process.env.PORT || 3000;
 
 app.set('port', port);
 app.set('views', path.join(__dirname, 'src/views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 
 app.enable('trust proxy');
 app.disable('X-Powered-By');
@@ -38,12 +38,13 @@ app.use((req, res, next) => {
 // render error page
 app.use((err, req, res, next) => {
   const error = err;
+  error.status = error.status || 500;
   if (app.get('env') !== 'development') {
     error.stack = 'Sorry...';
   }
-  res.status(err.status || 500);
+  res.status(error.status);
   res.render('error', { error });
-  next(err);
+  next(error);
 });
 
 // WebSocket Stuff

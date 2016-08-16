@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Zihao -- Owner -- @zzh8829
+
+# THANKS
+
+    Everyone
+
+# TECHNOLOGY COLOPHON
+    
+    jQuery, Bootstrap, Font Awesome, Three.js, Voxel.js
+    AWS, Nginx, Node.js, Express.js
