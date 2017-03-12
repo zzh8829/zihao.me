@@ -8,7 +8,7 @@ const path           = require('path');
 const app    = express();
 const server = require('http').createServer(app);
 const io     = require('socket.io').listen(server);
-const port   = process.env.PORT || 3000;
+const port   = process.env.PORT || 8080;
 
 app.set('port', port);
 app.set('views', path.join(__dirname, 'src/views'));
@@ -44,7 +44,6 @@ app.use((err, req, res, next) => {
   }
   res.status(error.status);
   res.render('error', { error });
-  next(error);
 });
 
 // WebSocket Stuff
@@ -78,7 +77,7 @@ const worldHalfWidth = worldWidth / 2;
 const worldHalfDepth = worldDepth / 2;
 
 /*eslint-disable */
-const ImprovedNoise = require('./public/js/vendor/three.js/examples/js/ImprovedNoise.js');
+const ImprovedNoise = require('./ImprovedNoise.js');
 
 function generateMap() {
   const data = generateHeight(worldWidth, worldDepth);
