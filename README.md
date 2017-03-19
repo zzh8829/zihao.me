@@ -1,6 +1,6 @@
 # DEPRECATED !
 ### This repo is no longer maintained here
-### New repo is at https://gitlab.com/zzh8829/zihao
+### New repo is at https://github.com/zzh8829/zihao
 
 # zihao.me
 My Home Page
